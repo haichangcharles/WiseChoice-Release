@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WiseChoice - Product Comparison Assistant</title>
+  <link rel="stylesheet" href="sidebar.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <h1 class="app-title">WiseChoice</h1>
+      <p class="app-subtitle">Smart Product Comparison</p>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="list">
+        <svg class="tab-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M3 2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H3zm1 2h8v1H4V4zm0 3h8v1H4V7zm0 3h5v1H4v-1z"/>
+        </svg>
+        Products
+      </button>
+      <button class="tab-btn" data-tab="chat">
+        <svg class="tab-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M2 3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-3.5l-2.5 2.5V11H3a1 1 0 0 1-1-1V3zm2 1v5h6V4H4z"/>
+        </svg>
+        Analysis
+      </button>
+    </nav>
+
+    <!-- Product List -->
+    <div class="tab-content active" id="list-tab">
+      <div class="toolbar">
+        <button id="toggle-select-all-btn" class="btn btn-secondary btn-small">
+          Select All
+        </button>
+        <button id="compare-btn" class="btn btn-primary">
+          Compare
+        </button>
+      </div>
+
+      <div id="product-list" class="product-list">
+        <!-- Product cards render here -->
+      </div>
+
+      <div id="empty-state" class="empty-state" style="display: none;">
+        <svg class="empty-icon" width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="8" y="16" width="48" height="40" rx="4"/>
+          <path d="M8 24h48M24 16v-4a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v4"/>
+        </svg>
+        <h3>No Products Yet</h3>
+        <p>Visit an Amazon product page and tap the "+" button to add items</p>
+      </div>
+    </div>
+
+    <!-- AI Analysis Panel -->
+    <div class="tab-content" id="chat-tab">
+      <div class="chat-header">
+        <button id="back-to-list-btn" class="btn btn-secondary btn-small">
+          ← Back
+        </button>
+      </div>
+      <div id="chat-content" class="chat-content">
+        <div class="chat-placeholder">
+          <svg class="chat-icon" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="24" cy="24" r="20"/>
+            <path d="M24 16v12M24 32v2"/>
+          </svg>
+          <p>Select at least 2 products, then tap "Compare"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="sidebar.js"></script>
+</body>
+</html>
+

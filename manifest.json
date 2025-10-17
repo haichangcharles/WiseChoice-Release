@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "WiseChoice",
+  "version": "1.0.0",
+  "description": "Smart product collection and comparison tool",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "sidePanel"
+  ],
+  "host_permissions": [
+    "*://*.amazon.com/*",
+    "*://*.amazon.co.uk/*",
+    "*://*.amazon.de/*",
+    "*://*.amazon.fr/*",
+    "*://*.amazon.co.jp/*",
+    "*://*.amazon.cn/*",
+    "*://*.amazon.ca/*",
+    "*://*.amazon.it/*",
+    "*://*.amazon.es/*",
+    "http://localhost:8765/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.amazon.com/*",
+        "*://*.amazon.co.uk/*",
+        "*://*.amazon.de/*",
+        "*://*.amazon.fr/*",
+        "*://*.amazon.co.jp/*",
+        "*://*.amazon.cn/*",
+        "*://*.amazon.ca/*",
+        "*://*.amazon.it/*",
+        "*://*.amazon.es/*"
+      ],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "WiseChoice - Product Comparison Assistant"
+  },
+  "side_panel": {
+    "default_path": "sidebar.html"
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}
+
+
