@@ -24,31 +24,30 @@
 
 ## 观看演示
 
-**PDF** 在 GitHub 上一般可直接在浏览器里打开。**视频**若希望访客**尽量在网页里直接看**、而不是依赖「先下载再播放」，请在公开仓库前按下面两种方式之一配置 `<source src>`：仅用仓库相对路径时，README 里的 `<video>` **经常无法在页面内稳定播放**，属于 GitHub 的限制。
+**PDF** 在 GitHub 上可以直接打开。
 
-### 在 README 里嵌入 MP4（公开前建议先做好）
+**视频（YouTube）** — GitHub 的 README **不允许插入 `<iframe>`**（安全策略），所以**不能**在页面里直接嵌 YouTube 原生播放器。常见做法是放 **可点击的封面图**，点开后在 YouTube 播放，阅读体验最接近「嵌入」。
 
-1. **Raw 直链** — 仓库公开后，将 `<source src>` 写为  
-   `https://raw.githubusercontent.com/<用户名>/<仓库名>/<分支>/asset/WiseChoice%20showcase.mp4`，长视频同理（分支如 `main`）。
-2. **Issue 附件链接** — 新建 Issue（例如标题「README 媒体」），在**评论里上传**各 `.mp4` 并发表，复制评论里生成的 `https://user-images.githubusercontent.com/…mp4`，写入 README 的 `<video><source src="…">`。该 CDN 链接在 README 里**最容易内嵌播放**。
-
-若下方播放器空白，可点 **[短片（GitHub 文件页）](asset/WiseChoice%20showcase.mp4)**、**[完整演示（GitHub 文件页）](asset/WiseChoice.mp4)** — 文件页通常带**浏览器内播放器**，不必强调「下载后观看」。
-
-**短片预告**
+| | |
+| --- | --- |
+| **短片 showcase** | [youtu.be/yymepETbr5Y](https://youtu.be/yymepETbr5Y) |
+| **完整演示** | [youtu.be/2kQKzbVTOPw](https://youtu.be/2kQKzbVTOPw) |
 
 <p align="center">
-  <video width="100%" style="max-width:720px" controls preload="metadata" playsinline muted>
-    <source src="asset/WiseChoice%20showcase.mp4" type="video/mp4" />
-  </video>
+  <a href="https://youtu.be/yymepETbr5Y" title="短片 — 在 YouTube 播放"><img src="https://img.youtube.com/vi/yymepETbr5Y/hqdefault.jpg" alt="WiseChoice 短片 — 点击在 YouTube 播放" width="420" /></a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="https://youtu.be/2kQKzbVTOPw" title="完整演示 — 在 YouTube 播放"><img src="https://img.youtube.com/vi/2kQKzbVTOPw/hqdefault.jpg" alt="WiseChoice 完整演示 — 点击在 YouTube 播放" width="420" /></a>
 </p>
+<p align="center"><sub>点击缩略图在 YouTube 播放。</sub></p>
 
-**完整演示**
+**仓库内同名 MP4：** [短片](asset/WiseChoice%20showcase.mp4) · [完整演示](asset/WiseChoice.mp4)（[`asset/`](asset/)）
 
-<p align="center">
-  <video width="100%" style="max-width:720px" controls preload="metadata" playsinline muted>
-    <source src="asset/WiseChoice.mp4" type="video/mp4" />
-  </video>
-</p>
+<details>
+<summary><b>可选：</b>在 README 里内嵌 MP4（维护者）</summary>
+
+部分环境下相对路径 `<video>` 不可用；公开仓库后可改用 `raw.githubusercontent.com/…/asset/…mp4` 或 Issue 附件的 `user-images.githubusercontent.com/…` 写入 `<video>`。
+
+</details>
 
 **文档（PDF）**
 
@@ -243,10 +242,22 @@ python api_server.py
 - **密钥：** 使用环境变量 `OPENAI_API_KEY`，切勿提交到仓库；可参考 `.env.example` 自建 `.env` 且勿入库。  
 - **网络：** 默认服务可能监听 `0.0.0.0`；若仅需本机访问，可在 `api_server.py` 中改为 `127.0.0.1`。  
 
+## 项目网站
+
+这个项目也提供了一个给观众直接浏览的页面（演示视频 + 资料）：
+
+- **线上地址：** `https://haichangcharles.github.io/WiseChoice-Release/`
+- **中文页：** `https://haichangcharles.github.io/WiseChoice-Release/index.zh-CN.html`
+
+若链接尚未生效，请先使用本 README 上方的 YouTube 与 PDF 入口。
+
 ## 仓库结构
 
 ```
 WiseChoice-Release/
+├── index.html / index.zh-CN.html
+├── project.config.json    # 站点与项目配置（主要改这个）
+├── site.css / site.js
 ├── asset/                 # PDF、演示视频、配图（heropage 标题区、systemdesign、dualmode）
 ├── manifest.json
 ├── content.js / content.css

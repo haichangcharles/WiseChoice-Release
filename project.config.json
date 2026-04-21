@@ -1,0 +1,49 @@
+{
+  "project": {
+    "name": "WiseChoice",
+    "tagline": {
+      "en": "Decide faster while you shop.",
+      "zh": "网购时更快做决定。"
+    },
+    "description": {
+      "en": "A Chrome extension plus a local AI service—collect Amazon candidates in the side panel and get a structured decision report (TL;DR, strategy, trade-offs). Amazon-ready by default; architecture is site-agnostic.",
+      "zh": "Chrome 扩展 + 本地 AI：侧边栏收录候选商品，生成结构化对比结论。默认对接亚马逊，架构可扩展至其他站点。"
+    }
+  },
+  "repository": {
+    "url": "https://github.com/haichangcharles/WiseChoice-Release",
+    "readme_en": "README.md",
+    "readme_zh": "README.zh-CN.md"
+  },
+  "youtube": {
+    "showcase": {
+      "videoId": "yymepETbr5Y",
+      "label": { "en": "Showcase (short)", "zh": "短片 showcase" }
+    },
+    "full": {
+      "videoId": "2kQKzbVTOPw",
+      "label": { "en": "Full walkthrough", "zh": "完整演示" }
+    }
+  },
+  "documents": [
+    {
+      "path": "asset/WiseChoice Document.pdf",
+      "label": { "en": "Report (PDF)", "zh": "报告 (PDF)" }
+    },
+    {
+      "path": "asset/WiseChoice_ Slide.pdf",
+      "label": { "en": "Slide deck (PDF)", "zh": "幻灯片 (PDF)" }
+    }
+  ],
+  "media": {
+    "hero": "asset/heropage.png",
+    "systemDesign": "asset/systemdesign.png",
+    "dualMode": "asset/dualmode.png",
+    "showcaseMp4": "asset/WiseChoice showcase.mp4",
+    "fullMp4": "asset/WiseChoice.mp4"
+  },
+  "license": {
+    "name": "MIT",
+    "file": "LICENSE"
+  }
+}

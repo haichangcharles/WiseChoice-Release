@@ -24,31 +24,30 @@
 
 ## Watch the demos
 
-**PDFs** open reliably in the browser on GitHub. **Videos** are easiest for visitors to **watch in-page** if you embed them using one of the two methods below—repo-relative `<video>` paths are often blocked or inconsistent on README pages, which is a GitHub platform limitation.
+**PDFs** open fine on GitHub.
 
-### Embed MP4 on GitHub (recommended before going public)
+**Videos (YouTube)** — GitHub **does not allow iframe embeds** in README files (security policy), so you cannot get a true in-page YouTube player here. The usual workaround is a **clickable thumbnail** → opens YouTube (same as “embed” UX for readers).
 
-1. **Raw URL (after the repo is public)** — In each `<source src="…">`, use  
-   `https://raw.githubusercontent.com/<OWNER>/<REPO>/<BRANCH>/asset/WiseChoice%20showcase.mp4` and the same pattern for `WiseChoice.mp4` (replace `OWNER`, `REPO`, `BRANCH`, e.g. `main`).
-2. **Issue attachment URL** — Create an Issue (e.g. titled “README media”), **attach each `.mp4` in a comment**, publish the comment, copy each `https://user-images.githubusercontent.com/…mp4` link into your README `<video><source src="…">`. That CDN URL is what GitHub uses for reliable in-page playback.
-
-If the player below is blank, use **[showcase (file view)](asset/WiseChoice%20showcase.mp4)** or **[full walkthrough (file view)](asset/WiseChoice.mp4)**—GitHub’s file page usually offers an in-browser player without asking people to “download to watch.”
-
-**Showcase (short)**
+| | |
+| --- | --- |
+| **Showcase (short)** | [youtu.be/yymepETbr5Y](https://youtu.be/yymepETbr5Y) |
+| **Full walkthrough** | [youtu.be/2kQKzbVTOPw](https://youtu.be/2kQKzbVTOPw) |
 
 <p align="center">
-  <video width="100%" style="max-width:720px" controls preload="metadata" playsinline muted>
-    <source src="asset/WiseChoice%20showcase.mp4" type="video/mp4" />
-  </video>
+  <a href="https://youtu.be/yymepETbr5Y" title="Showcase — play on YouTube"><img src="https://img.youtube.com/vi/yymepETbr5Y/hqdefault.jpg" alt="WiseChoice showcase — click to play on YouTube" width="420" /></a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="https://youtu.be/2kQKzbVTOPw" title="Full walkthrough — play on YouTube"><img src="https://img.youtube.com/vi/2kQKzbVTOPw/hqdefault.jpg" alt="WiseChoice full walkthrough — click to play on YouTube" width="420" /></a>
 </p>
+<p align="center"><sub>Click a thumbnail to play on YouTube.</sub></p>
 
-**Full walkthrough**
+**Same recordings in the repo (MP4):** [Showcase](asset/WiseChoice%20showcase.mp4) · [Full walkthrough](asset/WiseChoice.mp4) in [`asset/`](asset/).
 
-<p align="center">
-  <video width="100%" style="max-width:720px" controls preload="metadata" playsinline muted>
-    <source src="asset/WiseChoice.mp4" type="video/mp4" />
-  </video>
-</p>
+<details>
+<summary><b>Optional:</b> embed MP4 inside README (maintainers)</summary>
+
+GitHub sometimes blocks repo-relative `<video>`; after publish you can use `https://raw.githubusercontent.com/&lt;OWNER&gt;/&lt;REPO&gt;/&lt;BRANCH&gt;/asset/…mp4` or an Issue-upload `user-images.githubusercontent.com/…mp4` URL in a `<video>` tag.
+
+</details>
 
 **Documents (PDF)**
 
@@ -239,10 +238,22 @@ The figure **[system design](asset/systemdesign.png)** above matches this pipeli
 - **Secrets:** use `OPENAI_API_KEY` in the environment; never commit keys. Copy `.env.example` to `.env` if you use a local env file and keep it out of version control.
 - **Network:** The bundled server may listen on `0.0.0.0`; restrict to `127.0.0.1` in `api_server.py` if you want localhost-only access.
 
+## Project website
+
+This project also has a dedicated viewer page for demos and materials:
+
+- **Live site:** `https://haichangcharles.github.io/WiseChoice-Release/`
+- **Chinese page:** `https://haichangcharles.github.io/WiseChoice-Release/index.zh-CN.html`
+
+If these links are not live yet, use the README sections above (YouTube + PDFs).
+
 ## Repository layout
 
 ```
 WiseChoice-Release/
+├── index.html / index.zh-CN.html
+├── project.config.json    # Site + project links (edit this)
+├── site.css / site.js
 ├── asset/                 # PDFs, videos, figures (heropage hero, systemdesign, dualmode)
 ├── manifest.json
 ├── content.js / content.css
