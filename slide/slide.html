@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluation Results - Apple Glass</title>
+    <style>
+        /* 1. RESET & BASE */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #f5f5f7;
+            /* Fallback */
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 2. SLIDE CONTAINER */
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            overflow: hidden;
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            color: #1d1d1f;
+
+            /* BACKGROUND IMAGE */
+            /* Assuming the image is in the same directory */
+            background-image: url('image_63f1e3.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* 3. TYPOGRAPHY */
+        h1 {
+            font-size: 56px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 10px;
+            color: #1d1d1f;
+            /* Dark text for light background */
+        }
+
+        .subtitle {
+            font-size: 24px;
+            font-weight: 400;
+            color: #86868b;
+            margin-bottom: 50px;
+        }
+
+        /* 4. BENTO GRID LAYOUT */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            height: 100%;
+        }
+
+        /* 5. LIGHT GLASS CARDS */
+        .card {
+            /* Light Glass Effect */
+            background: rgba(255, 255, 255, 0.6);
+            /* High transparency white */
+            backdrop-filter: blur(40px);
+            /* Heavy blur for readability */
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            /* Subtle white border */
+
+            border-radius: 30px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            /* Soft shadow */
+            transition: transform 0.3s ease;
+        }
+
+        .card-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: #6e6e73;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 20px;
+        }
+
+        .big-number {
+            font-size: 80px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            background: -webkit-linear-gradient(45deg, #1d1d1f, #424245);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .big-number.medium {
+            font-size: 60px;
+        }
+
+        .big-number.blue {
+            background: -webkit-linear-gradient(45deg, #0071e3, #40a0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .big-number.green {
+            background: -webkit-linear-gradient(45deg, #28cd41, #5ce272);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-desc {
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 1.4;
+            color: #1d1d1f;
+            margin-top: 10px;
+        }
+
+        .card-desc-small {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-top: 5px;
+        }
+
+        .sub-desc {
+            font-size: 16px;
+            color: #86868b;
+            margin-top: 8px;
+        }
+
+        /* 6. VISUALIZATIONS */
+
+        /* Bar Chart */
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: auto;
+        }
+
+        .bar-row {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #86868b;
+        }
+
+        .bar-bg {
+            flex-grow: 1;
+            height: 12px;
+            background-color: rgba(0, 0, 0, 0.05);
+            border-radius: 6px;
+            margin-left: 15px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+        }
+
+        /* Split Container */
+        .split-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: space-between;
+        }
+
+        .split-item {
+            display: flex;
+            flex-direction: column;
+            padding: 5px 0;
+        }
+
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: rgba(0, 0, 0, 0.05);
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="slide-container">
+        <h1>Evaluation Results</h1>
+        <p class="subtitle">Significant improvements across all three causal dimensions.</p>
+
+        <div class="bento-grid">
+
+            <!-- H1: Reading Load -->
+            <div class="card">
+                <div class="card-header">Reading Load</div>
+                <div>
+                    <div class="big-number">54.6%</div>
+                    <div class="card-desc">RR_full</div>
+                    <div class="sub-desc">Full Report Information Reduction Ratio.</div>
+                    <div class="sub-desc">From 4.14m down to 1.80m per decision.</div>
+                </div>
+
+                <div class="bar-chart">
+                    <div class="bar-row">
+                        <span style="width: 85px">Raw</span>
+                        <div class="bar-bg">
+                            <div class="bar-fill" style="width: 100%; background-color: #86868b;"></div>
+                        </div>
+                    </div>
+                    <div class="bar-row">
+                        <span style="width: 85px; color: #0071e3;">WiseChoice</span>
+                        <div class="bar-bg">
+                            <div class="bar-fill" style="width: 44%; background-color: #0071e3;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- H2: Decision Efficiency -->
+            <div class="card">
+                <div class="card-header">Decision Efficiency</div>
+                <div class="split-container">
+                    <!-- Metric 1: RR_diff -->
+                    <div class="split-item">
+                        <div class="big-number medium blue">84.5%</div>
+                        <div class="card-desc-small">RR_diff</div>
+                        <div class="sub-desc">Key Differences Information Reduction Ratio.</div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Metric 2: CFCR -->
+                    <div class="split-item">
+                        <div class="big-number medium blue">0.15</div>
+                        <div class="card-desc-small">CFCR</div>
+                        <div class="sub-desc">Cognitive Factor Compression Rate (vs 64 baseline).</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- H3: Terminology -->
+            <div class="card">
+                <div class="card-header">Terminology Barriers</div>
+                <div
+                    style="display: flex; flex-direction: column; height: 100%; justify-content: center; align-items: center; text-align: center;">
+                    <div class="big-number green" style="font-size: 140px;">0%</div>
+                    <div class="card-desc" style="margin-top: 10px;">TBR</div>
+                    <div class="sub-desc" style="max-width: 250px;">Terminology Barrier Rate.</div>
+                    <div class="sub-desc" style="max-width: 250px;">The system successfully contextualized every
+                        technical term.</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

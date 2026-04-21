@@ -13,19 +13,10 @@ if ! command -v python3 &> /dev/null; then
     exit 1
 fi
 
-# Check API key
-if [ -z "$OPENAI_API_KEY" ]; then
-    echo "⚠️  Warning: OPENAI_API_KEY environment variable is not set."
-    echo ""
-    echo "Set your API key with:"
-    echo "export OPENAI_API_KEY=\"your-api-key-here\""
-    echo ""
-    read -p "Continue anyway? (y/N) " -n 1 -r
-    echo ""
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 1
-    fi
-fi
+# Check API key (Optional now as it is hardcoded)
+# if [ -z "$OPENAI_API_KEY" ]; then
+#     echo "⚠️  Warning: OPENAI_API_KEY environment variable is not set."
+# fi
 
 echo "✅ Environment check complete"
 echo ""

@@ -37,5 +37,14 @@ env/
 ENV/
 .venv
 
+# Secrets and local env (never commit API keys)
+.env
+.env.local
+.env.development
+.env.production
+# Optional: commit `.env.example` with placeholder names only
+
+# Runtime logs that may contain product/search text
+analysis_log.json
 
 

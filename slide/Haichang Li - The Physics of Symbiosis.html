@@ -1,0 +1,2128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google Tag Manager -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7X87BH2D0S"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-7X87BH2D0S');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haichang Li - The Physics of Symbiosis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --cursor-size: 8px;
+            --cursor-hover-size: 40px;
+            --color-light-1: #e0f2fe;
+            --color-light-2: #f0fdf4;
+            --color-light-3: #fdf4ff;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: #1a1a1a;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+            overflow: hidden;
+        }
+
+        body.initialized {
+            overflow-y: auto;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* --- Intro Overlay --- */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9990;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+            transition: opacity 0.8s ease-out;
+            cursor: pointer;
+        }
+
+        #intro-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .intro-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            animation: pulse-text 3s infinite;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 14px 28px;
+            border-radius: 999px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        @keyframes pulse-text {
+
+            0%,
+            100% {
+                opacity: 0.7;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.02);
+            }
+        }
+
+        /* --- Main Content --- */
+        #main-content {
+            opacity: 0;
+            transition: opacity 2s ease-out;
+            transition-delay: 0.5s;
+            pointer-events: none;
+        }
+
+        #main-content.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* --- Reveal Animations --- */
+        @keyframes focus-sway {
+            0% {
+                filter: blur(12px);
+                opacity: 0;
+                transform: translateY(25px) skewX(4deg);
+            }
+
+            40% {
+                filter: blur(6px);
+                opacity: 0.6;
+                transform: translateY(10px) skewX(-2deg);
+            }
+
+            70% {
+                filter: blur(2px);
+                opacity: 0.9;
+                transform: translateY(4px) skewX(1deg);
+            }
+
+            100% {
+                filter: blur(0);
+                opacity: 1;
+                transform: translateY(0) skewX(0);
+            }
+        }
+
+        .reveal-focus {
+            opacity: 0;
+        }
+
+        #main-content.visible .reveal-focus.active {
+            animation: focus-sway 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        /* --- Breathe Animations --- */
+        @keyframes float-breathe {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .breathe-slow {
+            animation: float-breathe 12s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+        }
+
+        .breathe-delayed {
+            animation: float-breathe 14s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+            animation-delay: -5s;
+        }
+
+        /* --- Cursor --- */
+        #cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--cursor-size);
+            height: var(--cursor-size);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 20000;
+            /* Ensure cursor is above everything */
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+            transition: width 0.3s, height 0.3s, background-color 0.3s, border 0.3s;
+            mix-blend-mode: difference;
+        }
+
+        #cursor.hovered {
+            width: var(--cursor-hover-size);
+            height: var(--cursor-hover-size);
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: none;
+        }
+
+        #cursor-trail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--cursor-size);
+            height: var(--cursor-size);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: left 0.1s ease-out, top 0.1s ease-out;
+        }
+
+        /* --- Typography --- */
+        .text-gradient {
+            background: linear-gradient(135deg, #000 0%, #444 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .serif-italic {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+        }
+
+        /* Tooltip Trigger Styles */
+        .insight-trigger {
+            font-weight: 500;
+            color: #000;
+            border-bottom: 1px dashed #999;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .insight-trigger:hover {
+            color: #0056b3;
+            border-bottom-color: #0056b3;
+            background-color: rgba(0, 86, 179, 0.05);
+        }
+
+        /* --- Tech-Elegant Link Styling --- */
+        .tech-link {
+            color: #4b5563;
+            /* gray-600 */
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+            /* Faint visible line */
+            transition: all 0.3s ease;
+            padding-bottom: 0px;
+        }
+
+        .tech-link:hover {
+            color: #000000;
+            border-bottom-color: #000000;
+            background: rgba(0, 0, 0, 0.03);
+            /* Subtle highlight */
+        }
+
+        /* Tooltip Box */
+        #insight-tooltip {
+            position: absolute;
+            display: none;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-left: 3px solid #000;
+            padding: 1.2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            max-width: 360px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+            border-radius: 6px;
+            pointer-events: none;
+        }
+
+        #insight-tooltip.active {
+            display: block;
+            animation: tooltip-fade 0.2s ease-out;
+        }
+
+        /* --- Easter Egg Speech Bubble --- */
+        #easter-egg-modal {
+            position: absolute;
+            /* Changed from fixed to absolute */
+            z-index: 10000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            transform: translateY(10px);
+            /* Reset modal styles */
+            display: block;
+            width: auto;
+            height: auto;
+            background: transparent;
+            backdrop-filter: none;
+            top: 0;
+            left: 0;
+        }
+
+        #easter-egg-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.98);
+            width: 600px;
+            /* Wider bubble */
+            max-width: 90vw;
+            /* Responsive safety */
+            padding: 2rem;
+            /* More breathing room */
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+            /* Tighter shadow */
+            position: relative;
+            transform: none !important;
+            /* Override modal scale transform */
+            border: 1px solid rgba(255, 255, 255, 1);
+        }
+
+        /* Speech Bubble Tail */
+        .modal-content::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            /* Stick out bottom */
+            left: 20px;
+            /* Position left-ish */
+            width: 16px;
+            height: 16px;
+            background: rgba(255, 255, 255, 0.98);
+            transform: rotate(45deg);
+            box-shadow: 1px 1px 0 0 rgba(0, 0, 0, 0.05);
+            /* Match border/shadow slightly */
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .modal-close {
+            top: 0.75rem;
+            right: 0.75rem;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        /* --- Canvas & UI --- */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+        }
+
+        /* Enterprise-Grade Glass Card (Semi-Transparent) */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            will-change: transform, box-shadow;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.55);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+            border-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .parallax-layer {
+            position: relative;
+            will-change: transform;
+        }
+
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* --- 3D Carousel Styles --- */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 650px;
+            perspective: 1200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2rem;
+            /* Important for wide overflow */
+            overflow: visible;
+        }
+
+        .carousel-card {
+            position: absolute;
+            width: 100%;
+            max-width: 600px;
+            /* Wider for better text layout */
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            /* Snappier transition for continuous movement */
+            transition: transform 0.1s linear, opacity 0.3s ease, z-index 0s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            /* Glass Card Styles embedded */
+            background: rgba(255, 255, 255, 0.75);
+            /* Slightly more opaque for readability */
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+            will-change: transform, opacity;
+            overflow: hidden;
+        }
+
+        /* Ensure content inside doesn't flicker during 3d transform */
+        .carousel-card * {
+            backface-visibility: hidden;
+        }
+
+        /* Custom Scrollbar for card content */
+        .card-content-scroll {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .card-content-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .card-content-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .card-content-scroll::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        /* Timeline Controls */
+        .timeline-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            z-index: 20;
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .timeline-dot::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            /* larger hit area */
+        }
+
+        .timeline-dot.active {
+            background: #000;
+            transform: scale(1.4);
+        }
+
+        .timeline-dot.active::after {
+            /* Add a ring to active dot */
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+        }
+
+        .timeline-dot.hover {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Journey Navigation Arrows */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 50;
+            transition: all 0.2s;
+            backdrop-filter: blur(4px);
+        }
+
+        .nav-arrow:hover {
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-prev {
+            left: 10px;
+        }
+
+        .nav-next {
+            right: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .nav-prev {
+                left: -20px;
+            }
+
+            .nav-next {
+                right: -20px;
+            }
+        }
+
+        /* Details Summary Styling */
+        details>summary {
+            list-style: none;
+            cursor: pointer;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #888;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            user-select: none;
+        }
+
+        details>summary:hover {
+            color: #000;
+        }
+
+        details>summary::after {
+            content: "+";
+            font-size: 1.2em;
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        details[open]>summary::after {
+            transform: rotate(45deg);
+        }
+
+        details>summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details>div {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.5s ease-out;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 0.95rem;
+            color: #4a4a4a;
+            line-height: 1.7;
+        }
+
+
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .list-disc-custom li {
+            position: relative;
+            padding-left: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .list-disc-custom li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #999;
+        }
+
+        /* --- 3D Flip Card Styles (FIXED for In-Place Flip) --- */
+        .flip-card {
+            background-color: transparent;
+            perspective: 2000px;
+            /* Reduced perspective distortion */
+            cursor: pointer;
+            position: relative;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Robust ease */
+            transform-style: preserve-3d;
+            transform-origin: center center;
+            /* Ensure center rotation */
+        }
+
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .flip-card-back {
+            transform: rotateY(180deg);
+            background: #111;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .affiliation-logo {
+            height: 1.2rem;
+            vertical-align: middle;
+            margin-left: 0.3em;
+            display: inline-block;
+            width: auto;
+        }
+
+        /* --- Exhibition Stack (Z-Axis Film) --- */
+        .exhibition-stage {
+            /* DEPRECATED: Retaining for legacy or remove via consolidation later */
+            display: none;
+        }
+
+        /* --- Unified Exhibition (Metal Stack) --- */
+        .exhibition-stage-unified {
+            position: relative;
+            perspective: 1500px;
+            height: 500px;
+            /* Slightly taller for dual cards */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Boundary: Clip top edge, allow overflow elsewhere */
+            clip-path: inset(0 -150% -150% -150%);
+        }
+
+        .dual-card-container {
+            position: absolute;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            /* Implicit */
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            /* The Container moves in 3D */
+            transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.8s ease;
+            will-change: transform, opacity;
+            transform-style: preserve-3d;
+        }
+
+        .metal-card {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            box-shadow:
+                inset 0 0 0 1px rgba(255, 255, 255, 0.8),
+                0 10px 20px rgba(0, 0, 0, 0.1),
+                0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            backface-visibility: hidden;
+        }
+
+        .card-image-box {
+            background: rgba(255, 255, 255, 0.4);
+            /* Semi-transparent */
+            backdrop-filter: blur(5px);
+            flex: 1;
+            /* Equal weight */
+            min-height: 160px;
+            /* Shorter, wider feel */
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            /* Separator */
+        }
+
+        .card-text-box {
+            /* Metal Style */
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            box-shadow:
+                inset 0 0 0 1px rgba(255, 255, 255, 0.8),
+                0 10px 20px rgba(0, 0, 0, 0.1),
+                0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 1.25rem;
+            flex: 1;
+            /* Equal weight */
+            min-height: 160px;
+            /* Shorter, wider feel */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .work-category-chip {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #aaa;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .exhibition-card {
+            position: absolute;
+            background: #fff;
+            width: 100%;
+            max-width: 550px;
+            height: 300px;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow:
+                0 4px 6px -1px rgba(0, 0, 0, 0.05),
+                0 10px 15px -3px rgba(0, 0, 0, 0.05),
+                0 1px 1px rgba(0, 0, 0, 0.05) inset;
+            /* Subtle inner rim */
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.8s ease;
+            will-change: transform, opacity;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            backface-visibility: hidden;
+        }
+
+        /* The "Film Frame" aesthetic */
+        .exhibition-card::before {
+            content: '';
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            right: 1rem;
+            bottom: 1rem;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        .work-category-chip {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #aaa;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* --- Ambient Lighting --- */
+        .ambient-light {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.4;
+            animation: float-light 20s infinite alternate;
+            pointer-events: none;
+        }
+
+        .ambient-1 {
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: var(--color-light-1);
+            animation-duration: 25s;
+        }
+
+        .ambient-2 {
+            bottom: -10%;
+            right: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: var(--color-light-3);
+            animation-delay: -10s;
+        }
+
+        @keyframes float-light {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(5%, 10%) scale(1.1);
+            }
+        }
+
+        /* --- Text Shimmer --- */
+        .text-shimmer {
+            background: linear-gradient(110deg,
+                    #1a1a1a 45%,
+                    #888 50%,
+                    #1a1a1a 55%);
+            background-size: 250% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer-text 8s infinite linear;
+        }
+
+
+
+        /* --- 3D Scroll Entry --- */
+        .reveal-3d {
+            opacity: 0;
+            transform: perspective(1000px) rotateX(45deg) translateY(100px) scale(0.9);
+            transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            will-change: transform, opacity;
+        }
+
+        .reveal-3d.active {
+            opacity: 1;
+            transform: perspective(1000px) rotateX(0) translateY(0) scale(1);
+        }
+
+        /* --- Advanced Light Effects --- */
+        #spotlight {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            /* Above background, below content */
+            background: radial-gradient(circle 800px at var(--x, 50%) var(--y, 50%),
+                    rgba(255, 255, 255, 0.05) 0%,
+                    transparent 40%);
+            mix-blend-mode: overlay;
+            transition: opacity 0.5s;
+        }
+
+        /* Dynamic Glow for Cards */
+        .glass-card,
+        .exhibition-card,
+        .metal-card {
+            position: relative;
+            /* Ensure relative positioning */
+        }
+
+        .glass-card::after,
+        .exhibition-card::after,
+        .metal-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            /* Simulate border width */
+            /* Simulate border width */
+            background: radial-gradient(400px circle at var(--card-x, 50%) var(--card-y, 50%),
+                    rgba(255, 255, 255, 0.9),
+                    transparent 40%);
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .glass-card:hover::after,
+        .exhibition-card:hover::after,
+        .metal-card:hover::after {
+            opacity: 1;
+        }
+
+        /* Inner Sheen */
+        .glass-card::before,
+        .exhibition-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(800px circle at var(--card-x, 50%) var(--card-y, 50%),
+                    rgba(255, 255, 255, 0.15),
+                    transparent 40%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .glass-card:hover::before,
+        .exhibition-card:hover::before {
+            opacity: 1;
+        }
+    </style>
+
+</head>
+
+<body class="antialiased selection:bg-black selection:text-white">
+
+    <div id="spotlight"></div>
+    <div id="cursor-trail"></div>
+    <div id="cursor"></div>
+    <div class="ambient-light ambient-1"></div>
+    <div class="ambient-light ambient-2"></div>
+    <div class="noise-overlay"></div>
+
+    <div id="canvas-container">
+        <canvas id="liquid-canvas"></canvas>
+    </div>
+
+    <!-- Intro Interaction -->
+    <div id="intro-overlay">
+        <div class="intro-text">
+            [ INITIALIZE_IDENTITY ]
+        </div>
+    </div>
+
+    <!-- Easter Egg Modal -->
+    <div id="easter-egg-modal">
+        <div class="modal-content">
+            <div class="modal-close">✕</div>
+            <div class="text-[10px] font-mono uppercase tracking-widest text-gray-400 mb-3">Insight Unlocked</div>
+            <div id="modal-text"
+                class="text-[11px] md:text-xs text-gray-700 leading-loose font-light text-justify tracking-wide">
+                <!-- Content injected via JS -->
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-100 text-center">
+                <span class="text-[10px] text-gray-400 uppercase tracking-widest">End of transmission</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content">
+        <!-- Enterprise Header -->
+        <nav
+            class="fixed top-0 w-full z-40 px-6 py-4 flex justify-between items-center mix-blend-difference text-white md:mix-blend-normal md:text-black transition-all duration-500">
+            <div class="text-xl font-bold tracking-tighter hover-trigger cursor-pointer flex items-center gap-2">
+                <span>HAICHANG LI</span>
+                <span class="text-xs font-normal opacity-50 border border-current px-1 rounded">OnAI</span>
+            </div>
+            <div class="hidden md:flex space-x-10 text-xs uppercase tracking-widest font-semibold">
+                <a href="#about" class="hover:opacity-50 transition-opacity hover-trigger">About</a>
+                <a href="#vision" class="hover:opacity-50 transition-opacity hover-trigger">Vision</a>
+                <a href="works.html" class="hover:opacity-50 transition-opacity hover-trigger">Portfolio</a>
+            </div>
+            <a href="mailto:charles@holonizer.com"
+                class="hidden md:block border border-gray-900 bg-white px-6 py-2 rounded-full text-xs uppercase tracking-widest hover:bg-black hover:text-white transition-all hover-trigger font-semibold shadow-sm">
+                Connect
+            </a>
+        </nav>
+
+        <!-- Hero: Brand Statement -->
+        <section
+            class="relative min-h-screen flex flex-col justify-center items-center px-6 text-center z-10 overflow-hidden">
+            <div class="max-w-4xl mx-auto space-y-8 parallax-layer" data-speed="0.06">
+                <div class="overflow-hidden">
+                    <p class="text-xs font-mono uppercase tracking-[0.4em] text-gray-500 mb-6 reveal-focus"
+                        style="animation-delay: 0.1s;">Researcher · Builder · Visionary</p>
+                </div>
+
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-semibold tracking-tighter leading-[0.9] reveal-focus parallax-layer"
+                    data-speed="0.12" style="animation-delay: 0.2s;">
+                    The Physics of <br>
+                    <span class="serif-italic text-gray-400 text-shimmer">Symbiosis.</span>
+                </h1>
+
+                <div class="max-w-2xl mx-auto mt-8 reveal-focus parallax-layer" data-speed="0.1"
+                    style="animation-delay: 0.4s;">
+                    <p class="text-xl md:text-2xl text-gray-800 leading-relaxed font-light">
+                        Bridging the gap between human intent and machine agency.<br>
+                        Constructing the substrate for the <span class="font-medium border-b border-black">OnAI</span>
+                        world.
+                    </p>
+                </div>
+
+                <div class="pt-12 reveal-focus parallax-layer flex justify-center gap-6" data-speed="0.06"
+                    style="animation-delay: 0.6s;">
+                    <a href="works.html"
+                        class="inline-flex items-center space-x-2 text-sm font-bold border-b-2 border-black pb-1 hover:opacity-50 transition-opacity cursor-pointer hover-trigger">
+                        <span>View Selected Works</span>
+                        <span class="text-lg">↓</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="absolute bottom-10 left-0 w-full flex justify-center items-center pointer-events-none parallax-layer"
+                data-speed="-0.24">
+                <span class="text-[10px] uppercase tracking-widest text-gray-400 animate-pulse">Scroll to Explore</span>
+            </div>
+        </section>
+
+        <!-- About Section (Bio + Photo Flip) -->
+        <section id="about" class="relative min-h-[50vh] py-16 px-6 z-10">
+            <div class="max-w-5xl mx-auto reveal-view parallax-layer" data-speed="0.06">
+                <!-- About Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-stretch">
+
+                    <!-- Bio Text -->
+                    <div class="md:col-span-8 glass-card p-8 rounded-3xl order-2 md:order-1 reveal-3d"
+                        style="transition-delay: 0.1s">
+                        <div
+                            class="space-y-8 text-sm md:text-base leading-loose font-light text-gray-600 text-justify tracking-wide">
+                            <p>
+                                <span
+                                    class="font-mono text-[10px] uppercase tracking-widest text-gray-400 block mb-3">Researcher
+                                    &
+                                    Builder</span>
+                                HelloWorld &#9997; I am Haichang(Charles) Li, a researcher and builder of<img
+                                    class="affiliation-logo" src="images/logo/onai.png" alt="OnAI Logo">. Previously, I
+                                was a founding member of
+                                <a href="https://www.shineresume.com/index" target="_blank" rel="noopener noreferrer"
+                                    class="tech-link">Sounding.AI<img class="affiliation-logo"
+                                        src="images/logo/shineresume.png" alt="Shine Resume Logo"></a><img
+                                    class="affiliation-logo" src="images/logo/soundingai.png" alt="SoundingAI Logo">,
+                                which is a startup raising 10M+ CNY to explore AI Agent system, and I also worked with
+                                <a href="https://flowtica.ai" target="_blank" rel="noopener noreferrer"
+                                    class="tech-link">Flowtica<img class="affiliation-logo"
+                                        src="images/logo/flowtica.png" alt="Flowtica Logo"></a>
+                                and <a href="https://en.wikipedia.org/wiki/MiraclePlus" target="_blank"
+                                    rel="noopener noreferrer" class="tech-link">MiraclePlus<img class="affiliation-logo"
+                                        src="images/logo/miracleplus.png" alt="MiraclePlus Logo"></a><small><i>
+                                        (Formerly YC China)</i></small>, and collaborated with <a
+                                    href="https://memoglasses.com" target="_blank" rel="noopener noreferrer"
+                                    class="tech-link">MEMO<img class="affiliation-logo" src="images/logo/memo.png"
+                                        alt="MEMO Logo"></a>.
+                                Currently, I am advised by <a
+                                    href="https://scholar.google.com/citations?user=xCxyGuwAAAAJ&hl=en" target="_blank"
+                                    rel="noopener noreferrer" class="tech-link">Prof. Zhicong Lu</a>, and I was advised
+                                by ACM
+                                Distinguished Scientist/IEEE Fellow <a href="https://yhlu.net/" target="_blank"
+                                    rel="noopener noreferrer" class="tech-link">Prof. Yung-hsiang Lu</a> during my
+                                undergraduate studies.
+                                My experiences span real-world and academia,
+                                which have shaped my passion for <b>making something people want</b> and a research
+                                focus oriented
+                                toward
+                                <i>practical applications</i> and <i><span class="insight-trigger"
+                                        data-insight="TL;DR for video: Research should start from real user pain points, and the end goal is a product that people are willing to use. We need to avoid the 'technology-first' pitfall. We should begin by validating the prevalence of a problem through user interviews and scenario observations (like shadowing a developer's workflow). This ensures our research is anchored to real-world pain points, laying the foundation of user needs for productization. The path to a product isn't a linear 'Research → Paper → Prototype → Feedback → Refactoring → Further Research → Product'. Each stage can overturn the conclusions of the previous one. This process demands continuous research, which is why I personally hope to engage in less fragmented research in the future."><u>productization</u></span>
+                                    (<a href="https://www.microsoft.com/en-us/research/video/from-paper-to-product/"
+                                        target="_blank" rel="noopener noreferrer" class="tech-link">'<image
+                                            class="affiliation-logo" src="images/logo/youtube.jpeg" alt="YouTube Logo">
+                                        </image><small>From Paper
+                                            to Product'</small></a>)</i> in <i><b>THE real world.</b></i>
+                            </p>
+
+                            <p>
+                                My interest lies in driving the evolution of the <b>AI–Human Relationship</b>, enabling
+                                us to
+                                benefit from a future society where AI is in everywhere — a shift I call <i>"from online
+                                    to
+                                    OnAI."</i>
+
+                                My focus has moved from traditional HCI to solving the <b>"Last Mile"</b> gap and
+                                building the collaborative flow infrastructure for the next
+                                generation of
+                                human-AI symbiosis.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <!-- Photo Flip Card -->
+                    <div class="md:col-span-4 order-1 md:order-2 reveal-3d flex flex-col h-full gap-3 justify-center"
+                        style="transition-delay: 0.3s">
+                        <!-- Photo: Fixed Aspect Ratio (Square) -->
+                        <div class="flip-card aspect-square w-full max-w-sm mx-auto"
+                            onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner h-full">
+                                <!-- Front: Professional -->
+                                <div
+                                    class="flip-card-front bg-gray-200 flex items-center justify-center relative group h-full">
+                                    <!-- Using placeholder if image not found, user can replace src -->
+                                    <img src="images/hc2.jpg" alt="Haichang Li" class="w-full h-full object-cover"
+                                        onerror="this.src='https://via.placeholder.com/400x533/e5e5e5/333?text=Professional';">
+                                    <div
+                                        class="absolute bottom-4 left-0 w-full text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <span
+                                            class="bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur-sm tracking-wider">CLICK
+                                            TO FLIP</span>
+                                    </div>
+                                </div>
+                                <!-- Back: Lifestyle -->
+                                <div
+                                    class="flip-card-back bg-gray-900 flex flex-col items-center justify-center p-6 text-center h-full">
+                                    <!-- User can replace with real image -->
+                                    <div class="w-full h-full relative overflow-hidden">
+                                        <img src="https://via.placeholder.com/400x533/1a1a1a/666?text=Life+Style"
+                                            alt="Lifestyle"
+                                            class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Info Block: Borderless & Minimal -->
+                        <div
+                            class="w-full max-w-sm mx-auto flex flex-col justify-center text-xs md:text-sm font-light text-gray-600 space-y-2 mt-4 text-center">
+                            <div>WeChat: MadeByCharlesLi</div>
+                            <div>Email: <a href="mailto:charles@holonizer.com"
+                                    class="hover:text-black transition-colors">charles@holonizer.com</a> / <a
+                                    href="mailto:li4560@purdue.edu"
+                                    class="hover:text-black transition-colors">li4560@purdue.edu</a> </div>
+                            <p class="space-x-1 pt-1 opacity-60 hover:opacity-100 transition-opacity">
+                                <span><a href="https://www.linkedin.com/in/haichang-li/" target="_blank"
+                                        class="hover:text-black transition-colors">LinkedIn</a></span> /
+                                <span><a href="https://twitter.com/haichang_li" target="_blank"
+                                        class="hover:text-black transition-colors">X</a></span> /
+                                <span><a href="https://github.com/Charles-HC-Li?tab=repositories" target="_blank"
+                                        class="hover:text-black transition-colors">Github</a></span> /
+                                <span><a href="https://scholar.google.com/citations?hl=en&user=W4yYoagAAAAJ"
+                                        target="_blank" class="hover:text-black transition-colors">Scholar</a></span> /
+                                <span><a href="Haichang_CV_Jun.pdf" target="_blank"
+                                        class="hover:text-black transition-colors">Résumé</a></span>
+                            </p>
+                        </div>
+
+                        <div class="text-center mt-1 space-y-1 opacity-0">
+                            <!-- Hidden but keeping space if needed, or just hide to save space -->
+                            <!-- <p class="text-xs font-mono text-gray-400 uppercase tracking-widest">Professional / Life</p> -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Exhibition Section (Works / Stack) -->
+        <!-- Unified Vision & Exhibition Section -->
+        <section id="vision" class="relative pt-40 pb-10 px-6 z-20"> <!-- Removed bg-gray-50 -->
+            <div class="max-w-7xl mx-auto"> <!-- Wider container for split view -->
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-16 items-start">
+
+                    <!-- Left Column: Metal Exhibition Stack (Sticky on Desktop) -->
+                    <div class="md:col-span-5 md:sticky md:top-24 z-30">
+                        <div class="mb-4 flex justify-between items-end">
+                            <h2 class="text-xs font-mono uppercase tracking-[0.2em] text-gray-400">Selected Works</h2>
+                            <!-- Stack Controls -->
+                            <div class="flex gap-2">
+                                <button id="stack-prev"
+                                    class="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center hover:bg-black hover:text-white transition-colors text-xs">↑</button>
+                                <button id="stack-next"
+                                    class="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center hover:bg-black hover:text-white transition-colors text-xs">↓</button>
+                            </div>
+                        </div>
+
+                        <!-- 3D Stage -->
+                        <div class="exhibition-stage-unified" id="stack-stage">
+                            <!-- Dual Cards injected via JS -->
+                        </div>
+
+                        <div class="text-center mt-6">
+                            <p class="text-[9px] text-gray-300 uppercase tracking-widest font-mono">Exhibition •
+                                2023-2026</p>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: The Shift (Manifesto) -->
+                    <div class="md:col-span-1 border-l border-gray-200 h-full hidden md:block opacity-50"></div>
+                    <!-- Vertical Divider -->
+
+                    <div class="md:col-span-6 space-y-20 pt-8">
+                        <!-- Manifesto Header -->
+                        <div class="reveal-view parallax-layer" data-speed="0.04">
+                            <h2 class="text-5xl md:text-6xl font-medium tracking-tight mb-8">The Shift</h2>
+                            <p class="text-xl text-gray-500 font-light leading-relaxed">
+                                My transition from designing interfaces to architecting <span
+                                    class="text-black font-normal">intelligence</span>.
+                            </p>
+                        </div>
+
+                        <!-- Deep Dive Text -->
+                        <div class="reveal-3d">
+                            <div class="prose prose-lg text-gray-600 leading-8 font-light text-left">
+                                <p class="mb-4">
+                                    With a <b>0-to-1 background</b> spanning AI Startups, Research, PM, and VC, I focus
+                                    on the gaps between Research, Product, and Market. Previously, my work received the
+                                    <b>CES AI Best Innovation Award</b> and Purdue DUIRI Fellowship, with features in
+                                    <i>Yahoo! Tech</i> and <i>Tech Xplore</i>.
+                                </p>
+                                <p class="mb-4 text-xs md:text-sm">
+                                    My early training was rooted in <b>Human–AI Interaction</b>. Initially, when model
+                                    agency was limited, I focused on making AI an "Iron Man suit" for humans—using
+                                    agentic systems to understand user intent for tasks like MV generation and 3D
+                                    modeling.
+                                </p>
+                                <p class="mb-4 text-xs md:text-sm">
+                                    However, I have moved beyond surface-level Interaction. I realized that constraining
+                                    AI within fixed UI pipelines limits its potential. I resonate with <i>The Bitter
+                                        Lesson</i> — <span class="italic bg-gray-100 px-1 rounded">"We want AI agents
+                                        that can discover like we can, not which contain what we have
+                                        discovered"</span>.
+                                </p>
+                                <p class="text-xs md:text-sm">
+                                    <b>The Goal:</b> To grow AI from a supportive "suit" into a true <b>"Iron
+                                        Man"</b>—an autonomous entity capable of understanding personalized intent and
+                                    context, driving the Human-AI relationship from the bottom up.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Journey / Timeline (Continuous Rotating Carousel) -->
+        <section id="journey" class="relative pt-5 pb-20 px-6 z-30">
+            <div class="max-w-5xl mx-auto reveal-view parallax-layer" data-speed="0.05">
+                <div class="text-center mb-8">
+                    <h2 class="text-xs font-mono uppercase tracking-[0.2em] text-gray-400">The Journey</h2>
+                    <h3 class="text-2xl font-medium tracking-tight mt-2">Evolution of a Builder</h3>
+                </div>
+
+                <!-- 3D Carousel Stage -->
+                <div class="carousel-container" id="journey-carousel">
+
+                    <!-- Card 1: Shine Resume (First) -->
+                    <div class="carousel-card">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-xl font-bold">Shine Resume</h4>
+                            <span class="text-xs font-mono text-gray-500">2023</span>
+                        </div>
+                        <div class="card-content-scroll">
+                            <p class="text-sm text-gray-600 leading-relaxed mb-4 text-justify">
+                                <b>Founding Member.</b> Reconstructed resume generation with an AI-first,
+                                context-centric approach.
+                            </p>
+                            <ul class="text-xs text-gray-500 space-y-2 mb-4 list-disc-custom">
+                                <li>Built industry-role-experience database to supplement weak user input.</li>
+                                <li>Implemented Multi-Agent workflow for info extraction and rewriting ahead of market.
+                                </li>
+                                <li>Expanded output to "Multimodal Career Packages" for better candidate visibility.
+                                </li>
+                            </ul>
+                            <details class="group/thought" onclick="event.stopPropagation()" open>
+                                <summary>MY THOUGHT</summary>
+                                <div>
+                                    "My journey began with a failed startup. Ahead of the trend, I utilized multi-agent
+                                    systems for complex contexts. However, this 'LLM wrapper' did not stand the test of
+                                    time, bringing me a harsh lesson about value and defensibility."
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Purdue -->
+                    <div class="carousel-card">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-xl font-bold">Purdue University</h4>
+                            <span class="text-xs font-mono text-gray-500">2024.12</span>
+                        </div>
+                        <div class="card-content-scroll">
+                            <p class="text-sm text-gray-600 leading-relaxed mb-4 text-justify">
+                                <b>Research Project Manager.</b> Managed a diverse team of 30+. Pioneered Vibe Coding
+                                paradigms before industry adoption.
+                            </p>
+                            <ul class="text-xs text-gray-500 space-y-2 mb-4 list-disc-custom">
+                                <li>Secured $990k NSF funding and managed full-cycle delivery.</li>
+                                <li>Led "Mus2Vid": Synesthetic multimodal LLM system for narrative video generation.
+                                </li>
+                                <li>Led "A11yShape": AI-assisted 3D modeling for the blind using natural language (Vibe
+                                    Coding).</li>
+                            </ul>
+                            <details class="group/thought" onclick="event.stopPropagation()" open>
+                                <summary>MY THOUGHT</summary>
+                                <div>
+                                    "We should use tools to help machines understand human intent, rather than limiting
+                                    the machine's intelligence. In other words, we only help make the shovels; we don't
+                                    replace the gold prospectors to pan for gold directly. During this time, I conducted
+                                    early explorations into vibe coding and contextual engineering—predating features
+                                    like Cursor's 'Coding Agent'."
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Flowtica -->
+                    <div class="carousel-card">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-xl font-bold">Flowtica AI</h4>
+                            <span class="text-xs font-mono text-gray-500">2025.3</span>
+                        </div>
+                        <div class="card-content-scroll">
+                            <p class="text-sm text-gray-600 leading-relaxed mb-4 text-justify">
+                                <b>AI Product Manager.</b> Proposed an AI-Native Workspace paradigm to address context
+                                fragmentation caused by linear time-based interactions.
+                            </p>
+                            <ul class="text-xs text-gray-500 space-y-2 mb-4 list-disc-custom">
+                                <li>Led the construction of the AI-Native Workspace paradigm.</li>
+                                <li>Analyzed structural bottlenecks in voice interaction scenarios.</li>
+                                <li>Designed three conceptual prototypes for "Human-AI Co-existence Workspaces".</li>
+                            </ul>
+                            <details class="group/thought" onclick="event.stopPropagation()" open>
+                                <summary>MY THOUGHT</summary>
+                                <div>
+                                    "Transforming AI from a single-turn tool into a long-term collaborator that
+                                    transcends time. These prototypes were integrated into the product, and my
+                                    continuous thinking on improving the 'local state' of interaction led to my MaaS
+                                    Vision Paper."
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: MiraclePlus -->
+                    <div class="carousel-card">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-xl font-bold">MiraclePlus (YC China)</h4>
+                            <span class="text-xs font-mono text-gray-500">2025.7 - Present</span>
+                        </div>
+                        <div class="card-content-scroll">
+                            <p class="text-sm text-gray-600 leading-relaxed mb-4 text-justify">
+                                Systematically observing AI entrepreneurs from early-stage to maturity. Abstracting
+                                structural disconnects in <b>Research–Product–Market Fit (RPMF)</b> into strategic
+                                frameworks.
+                            </p>
+                            <ul class="text-xs text-gray-500 space-y-2 mb-4 list-disc-custom">
+                                <li>Identifying frontier signals through systematic interviews with Researcher-Founders.
+                                </li>
+                                <li>Formulating actionable strategies for technical implementation hurdles.</li>
+                                <li>Designing core discussions on Agentic models and Embodied AI.</li>
+                            </ul>
+                            <details class="group/thought" onclick="event.stopPropagation()" open>
+                                <summary>MY THOUGHT</summary>
+                                <div>
+                                    "This experience allowed me to complete the critical transformation from 'research
+                                    based on personal preference' to 'research driven by real needs.' To me, there is no
+                                    distinction of high or low between the two, but the latter is better able to
+                                    directly create social value. Now, I view research as the core means of solving
+                                    problems—using it to transform an idea into a prototype directly empowering the real
+                                    world."
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Indicators -->
+                <div class="timeline-controls">
+                    <div class="timeline-dot active" data-index="0"></div>
+                    <div class="timeline-dot" data-index="1"></div>
+                    <div class="timeline-dot" data-index="2"></div>
+                    <div class="timeline-dot" data-index="3"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer
+            class="py-12 px-6 border-t border-gray-200 bg-white/60 backdrop-blur-md z-10 relative mt-12 parallax-layer"
+            data-speed="0.05">
+            <div class="max-w-5xl mx-auto flex flex-row flex-wrap justify-between items-end gap-8">
+                <div>
+                    <h1 class="text-xl font-bold tracking-tighter mb-4">Haichang Li</h1>
+                    <p class="text-xs text-gray-500 max-w-xs leading-relaxed">
+                        Based in the cloud, grounded in reality.<br>
+                        Building the interface for the next era of human cognition.
+                    </p>
+                </div>
+                <div class="flex flex-wrap gap-6 text-xs font-bold uppercase tracking-wider">
+                    <a href="https://twitter.com/haichang_li" target="_blank"
+                        class="hover:text-gray-500 transition-colors">X / Twitter</a>
+                    <a href="https://www.linkedin.com/in/haichang-li/" target="_blank"
+                        class="hover:text-gray-500 transition-colors">LinkedIn</a>
+                    <a href="https://github.com/Charles-HC-Li" target="_blank"
+                        class="hover:text-gray-500 transition-colors">GitHub</a>
+                    <a href="mailto:charles@holonizer.com" class="hover:text-gray-500 transition-colors">Email</a>
+                </div>
+            </div>
+            <!-- Tooltip Element -->
+            <div id="insight-tooltip"></div>
+        </footer>
+    </div>
+
+    <script>
+        // --- 1. Continuous Carousel Logic ---
+        const carousel = document.getElementById('journey-carousel');
+        const cards = Array.from(document.querySelectorAll('.carousel-card'));
+        const dots = Array.from(document.querySelectorAll('.timeline-dot'));
+        const prevBtn = document.querySelector('.nav-prev');
+        const nextBtn = document.querySelector('.nav-next');
+
+        let progress = 0;
+        let speed = 0.015; // Fast Speed
+        let isPaused = false;
+        let animationFrameId;
+
+        // PRECISION HOVER: Pause ONLY when hovering a card
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => { isPaused = true; });
+            card.addEventListener('mouseleave', () => { isPaused = false; });
+        });
+
+        // Touch interaction for mobile
+        let touchStartX = 0;
+        let touchLastX = 0;
+        carousel.addEventListener('touchstart', e => {
+            isPaused = true;
+            touchStartX = e.touches[0].clientX;
+            touchLastX = touchStartX;
+        });
+
+        carousel.addEventListener('touchmove', e => {
+            if (!isPaused) return;
+            const clientX = e.touches[0].clientX;
+            const diff = touchLastX - clientX;
+            // Drag sensitivity
+            progress += diff * 0.005;
+            touchLastX = clientX;
+            updateCarousel(progress);
+        });
+
+        carousel.addEventListener('touchend', () => {
+            isPaused = false;
+        });
+
+        function animateCarouselLoop() {
+            if (!isPaused) {
+                progress += speed;
+            }
+            updateCarousel(progress);
+            animationFrameId = requestAnimationFrame(animateCarouselLoop);
+        }
+
+        function updateCarousel(p) {
+            let safeP = p % cards.length;
+            if (safeP < 0) safeP += cards.length;
+            const centerIndex = Math.round(safeP) % cards.length;
+
+            cards.forEach((card, i) => {
+                let relPos = (i - p) % cards.length;
+                if (relPos > cards.length / 2) relPos -= cards.length;
+                if (relPos < -cards.length / 2) relPos += cards.length;
+
+                const absPos = Math.abs(relPos);
+
+                // Visual mapping
+                let opacity = 1 - Math.pow(absPos / 1.5, 2);
+                opacity = Math.max(0, Math.min(1, opacity));
+
+                const scale = 1 - (absPos * 0.2);
+                const xTrans = relPos * 70;
+                const zTrans = -100 * absPos;
+                const rotY = relPos * -25;
+
+                card.style.transform = `translateX(${xTrans}%) translateZ(${zTrans}px) rotateY(${rotY}deg) scale(${scale})`;
+                card.style.opacity = opacity;
+
+                // FIXED Z-INDEX: Right side higher than Left
+                let zIndex = 0;
+                if (Math.abs(relPos) < 0.1) {
+                    zIndex = 50;
+                } else if (relPos > 0) {
+                    zIndex = 40 - Math.round(absPos);
+                } else {
+                    zIndex = 40 - Math.round(absPos);
+                }
+                card.style.zIndex = zIndex;
+
+                // Interaction
+                card.style.pointerEvents = absPos < 0.5 ? 'auto' : 'none';
+            });
+
+            // Update dots
+            dots.forEach((dot, i) => {
+                if (i === centerIndex) dot.classList.add('active');
+                else dot.classList.remove('active');
+            });
+        }
+
+        // Start
+        animateCarouselLoop();
+
+        // --- 1.5 Exhibition Stack Logic (Inserted) ---
+        const worksData = [
+            {
+                id: "P.1",
+                category: "Research",
+                title: "Memory as a Service (MaaS): Rethinking Contextual Memory as Service-Oriented Modules",
+                authors: "<b>Haichang Li</b>",
+                venue: "Position Paper, <a href='https://arxiv.org/abs/2506.22815' target='_blank' class='border-b border-gray-300 hover:border-black'>arXiv</a>",
+                desc: "Contextual memory architecture for collaborative agents.",
+                year: "2025",
+                color: "#e0f2fe"
+            },
+            {
+                id: "C.2",
+                category: "Research",
+                title: "A11yShape: AI-Assisted 3-D Modeling for Blind and Low-Vision Programmers",
+                authors: "Zhuohao Zhang, <b>Haichang Li</b>, et al.",
+                venue: "ASSETS 2025",
+                note: "Leading researcher on system and study.",
+                media: "UMich News, Tech Xplore",
+                year: "2025",
+                color: "#f3e8ff"
+            },
+            {
+                id: "C.1",
+                category: "Research",
+                title: "Visualize Music Using Generative Arts",
+                authors: "Brian Ng, <b>Haichang Li</b>, et al.",
+                venue: "IEEE CAI 2024",
+                year: "2024",
+                color: "#fef3c7"
+            },
+            {
+                id: "M.1",
+                category: "Research",
+                title: "A11yReview: A Literature Review on Accessibility Artifacts",
+                authors: "Anonymous",
+                venue: "Manuscript (CHI 2026)",
+                year: "2026",
+                color: "#f1f5f9"
+            },
+            {
+                id: "W.1",
+                category: "Implementation",
+                title: "Flowtica AI",
+                desc: "A voice-first agent/pen designed to transform AI from a single-turn tool into a long-term partner.",
+                link: "https://www.flowtica.ai/",
+                media: "Yahoo! Tech",
+                year: "Product",
+                color: "#ecfccb"
+            },
+            {
+                id: "W.2",
+                category: "Implementation",
+                title: "Shine Resume",
+                desc: "Multi-Agent system for resume optimization and real-time interview aids.",
+                link: "https://www.shineresume.com/",
+                year: "Startup",
+                color: "#ffe4e6"
+            }
+        ];
+
+        const stackStage = document.getElementById('stack-stage');
+        let stackIndex = 0;
+        let stackPaused = false;
+
+        function initStack() {
+            if (!stackStage) return;
+            stackStage.innerHTML = '';
+            worksData.forEach((work, i) => {
+                // Wrapper for Dual Cards
+                const container = document.createElement('div');
+                container.className = 'dual-card-container group cursor-pointer';
+
+                // Color accent for placeholders
+                const colorEncoded = work.color || '#eee';
+
+                container.innerHTML = `
+                    <!-- Top: Image Card (Transparent + Placeholder) -->
+                    <div class="card-image-box">
+                        <div class="absolute inset-0 opacity-50 mix-blend-multiply" style="background: ${colorEncoded};"></div>
+                        <img src="https://via.placeholder.com/600x400/cccccc/969696?text=${encodeURIComponent(work.category)}" class="w-full h-full object-cover opacity-80 mix-blend-multiply grayscale hover:grayscale-0 transition-all duration-500" alt="${work.title}">
+                         <div class="absolute top-4 right-4 bg-white/80 backdrop-blur-md px-2 py-1 rounded text-[10px] font-mono tracking-widest border border-gray-200">
+                            ${work.year}
+                        </div>
+                    </div>
+
+                    <!-- Bottom: Text Card (Metal Pane) -->
+                    <div class="metal-card card-text-box">
+                        <div>
+                             <div class="flex justify-between items-start mb-2">
+                                <div class="work-category-chip">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-black"></span>
+                                    ${work.id}
+                                </div>
+                             </div>
+                            <h4 class="text-lg md:text-xl font-semibold leading-tight tracking-tight text-gray-900 group-hover:text-black transition-colors">
+                                ${work.title}
+                            </h4>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-gray-200/50 flex justify-between items-end">
+                            <div class="text-[10px] text-gray-500 font-mono max-w-[80%] truncate">
+                                ${work.authors || work.venue || work.year}
+                            </div>
+                            <span class="text-lg opacity-30 group-hover:opacity-100 transition-opacity">↗</span>
+                        </div>
+                    </div>
+                `;
+
+                container.addEventListener('mouseenter', () => stackPaused = true);
+                container.addEventListener('mouseleave', () => stackPaused = false);
+                stackStage.appendChild(container);
+            });
+            updateStack();
+        }
+
+        function updateStack() {
+            const cards = Array.from(document.querySelectorAll('.dual-card-container'));
+            cards.forEach((card, i) => {
+                let relativePos = (i - stackIndex + worksData.length) % worksData.length;
+
+                if (relativePos === worksData.length - 1) {
+                    // Past (Fly Up) - Controlled at 1/2 height (-50%)
+                    card.style.transform = `translateY(-50%) translateZ(50px) rotateX(5deg)`;
+                    card.style.opacity = '0';
+                    card.style.zIndex = 0;
+                    card.style.pointerEvents = 'none';
+                } else if (relativePos === 0) {
+                    // Active (Front)
+                    card.style.transform = `translateY(0) translateZ(0) scale(1)`;
+                    card.style.opacity = '1';
+                    card.style.zIndex = 50;
+                    card.style.pointerEvents = 'auto';
+                } else {
+                    // Future (Back Stack)
+                    const depth = relativePos;
+                    const scale = 1 - (depth * 0.08); // More aggressive scaling for depth
+                    const transY = depth * 40; // Visible stacking vertical offset
+                    const transZ = depth * -60; // Z-depth
+
+                    if (depth > 2) {
+                        card.style.opacity = '0';
+                        card.style.transform = `translateY(100px) translateZ(-200px)`;
+                    } else {
+                        card.style.transform = `translateY(${transY}px) translateZ(${transZ}px) scale(${scale})`;
+                        card.style.opacity = `${1 - (depth * 0.4)}`; // Fade faster
+                    }
+                    card.style.zIndex = 50 - depth;
+                    card.style.pointerEvents = 'none';
+                }
+            });
+        }
+
+        setInterval(() => {
+            if (!stackPaused) {
+                stackIndex = (stackIndex + 1) % worksData.length;
+                updateStack();
+            }
+        }, 3500);
+
+        const btnNext = document.getElementById('stack-next');
+        const btnPrev = document.getElementById('stack-prev');
+        if (btnNext) btnNext.addEventListener('click', () => {
+            stackIndex = (stackIndex + 1) % worksData.length;
+            updateStack();
+        });
+        if (btnPrev) btnPrev.addEventListener('click', () => {
+            stackIndex = (stackIndex - 1 + worksData.length) % worksData.length;
+            updateStack();
+        });
+
+        initStack();
+
+
+        // --- 2. Standard Cursor & Scroll Logic ---
+        const cursor = document.getElementById('cursor');
+        const cursorTrail = document.getElementById('cursor-trail');
+        const hoverTriggers = document.querySelectorAll('.hover-trigger');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            setTimeout(() => {
+                cursorTrail.style.left = e.clientX + 'px';
+                cursorTrail.style.top = e.clientY + 'px';
+            }, 50);
+        });
+
+        hoverTriggers.forEach(trigger => {
+            trigger.addEventListener('mouseenter', () => {
+                cursor.classList.add('hovered');
+                cursorTrail.style.opacity = '0';
+            });
+            trigger.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hovered');
+                cursorTrail.style.opacity = '1';
+            });
+        });
+
+        // --- 3. System State & Core Logic ---
+        let initialized = false;
+        const introOverlay = document.getElementById('intro-overlay');
+        const mainContent = document.getElementById('main-content');
+        const introText = document.querySelector('.intro-text');
+
+        // --- 3.5 3D Tilt Effect ---
+        const tiltCards = document.querySelectorAll('.glass-card, .exhibition-card, .flip-card');
+
+        tiltCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                // Calculate rotation (max 10 degrees)
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = ((y - centerY) / centerY) * -5;
+                const rotateY = ((x - centerX) / centerX) * 5;
+
+                // Add distinct ambient shine based on mouse position
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+            });
+        });
+
+        // --- 4. 3D Particle Engine ---
+        const canvas = document.getElementById('liquid-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let mouse = { x: -1000, y: -1000 };
+        let time = 0;
+
+        const SPRING_STRENGTH = 0.12;
+        const FRICTION = 0.80;
+        const SPHERE_RADIUS = 200;
+        let rotX = 0.4;
+        let rotY = 0;
+
+        class Particle {
+            constructor(ix, iy, u, v) {
+                this.ix = ix; this.iy = iy; this.u = u; this.v = v;
+                this.x = width / 2; this.y = height / 2; this.vx = 0; this.vy = 0;
+                this.targetGridX = 0; this.targetGridY = 0; this.zDepth = 0; this.waveOffset = 0;
+            }
+
+            update(scrollForce) {
+                if (!initialized) {
+                    const theta = this.u * Math.PI * 2; const phi = this.v * Math.PI;
+                    const wave1 = Math.sin(theta * 6 + time * 0.08) * 5;
+                    const wave2 = Math.cos(phi * 10 + time * 0.12) * 5;
+                    const wave3 = Math.sin((theta + phi) * 8 + time * 0.15) * 3;
+                    const r = SPHERE_RADIUS + wave1 + wave2 + wave3;
+                    this.waveOffset = wave1 + wave2 + wave3;
+                    let x = r * Math.sin(phi) * Math.cos(theta);
+                    let y = r * Math.cos(phi);
+                    let z = r * Math.sin(phi) * Math.sin(theta);
+                    const cosX = Math.cos(rotX); const sinX = Math.sin(rotX);
+                    const cosY = Math.cos(rotY); const sinY = Math.sin(rotY);
+                    let y1 = y * cosX - z * sinX; let z1 = z * cosX + y * sinX; let x1 = x;
+                    let x2 = x1 * cosY - z1 * sinY; let z2 = z1 * cosY + x1 * sinY; let y2 = y1;
+                    const floatY = Math.sin(time * 0.01) * 10;
+                    const fov = 1000; const scale = fov / (fov + z2);
+                    let targetX = width / 2 + x2 * scale;
+                    let targetY = height / 2 + y2 * scale + floatY;
+                    this.zDepth = z2;
+                    this.x += (targetX - this.x) * 0.2; this.y += (targetY - this.y) * 0.2;
+                } else {
+                    const spreadX = width * 1.2; const spreadY = height * 1.2;
+                    this.targetGridX = (this.u - 0.5) * spreadX + width / 2;
+                    this.targetGridY = (this.v - 0.5) * spreadY + height / 2;
+                    const dx = this.targetGridX - this.x; const dy = this.targetGridY - this.y;
+                    this.vx += dx * SPRING_STRENGTH; this.vy += dy * SPRING_STRENGTH;
+                    const dxMouse = mouse.x - this.x; const dyMouse = mouse.y - this.y;
+                    const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+                    const mouseRadius = 350;
+                    if (distMouse < mouseRadius) {
+                        const force = (mouseRadius - distMouse) / mouseRadius;
+                        const angle = Math.atan2(dyMouse, dxMouse);
+                        const pressure = force * 8.0;
+                        this.vx -= Math.cos(angle) * pressure; this.vy -= Math.sin(angle) * pressure;
+                    }
+                    let rawScrollForce = scrollForce * 0.3;
+                    if (rawScrollForce > 0.8) rawScrollForce = 0.8;
+                    if (rawScrollForce < -0.8) rawScrollForce = -0.8;
+                    this.vy -= rawScrollForce;
+                    const waveY = Math.sin(this.ix * 0.08 + time * 0.003) * 0.06;
+                    this.vy += waveY;
+                    this.vx *= FRICTION; this.vy *= FRICTION;
+                    this.x += this.vx; this.y += this.vy;
+                }
+            }
+        }
+
+        let particles = []; let cols, rows;
+
+        function initCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            width = window.innerWidth; height = window.innerHeight;
+            canvas.width = width * dpr; canvas.height = height * dpr;
+            canvas.style.width = width + 'px'; canvas.style.height = height + 'px';
+            ctx.scale(dpr, dpr);
+            particles = [];
+            cols = width < 768 ? 25 : 50; rows = width < 768 ? 15 : 30;
+            for (let i = 0; i <= cols; i++) {
+                for (let j = 0; j <= rows; j++) {
+                    const u = i / cols; const v = j / rows;
+                    particles.push(new Particle(i, j, u, v));
+                }
+            }
+        }
+
+        introOverlay.addEventListener('click', () => {
+            if (initialized) return;
+            introText.innerText = "SYSTEM_ONLINE";
+            introText.style.background = "#000"; introText.style.color = "#fff";
+            setTimeout(() => introOverlay.classList.add('hidden'), 300);
+            particles.forEach(p => {
+                const ang = Math.random() * Math.PI * 2;
+                const mag = Math.random() * 30 + 10;
+                p.vx = Math.cos(ang) * mag; p.vy = Math.sin(ang) * mag;
+            });
+            initialized = true;
+            document.body.classList.add('initialized');
+            mainContent.classList.add('visible');
+            setTimeout(() => {
+                document.querySelectorAll('.reveal-focus').forEach(el => el.classList.add('active'));
+            }, 800);
+
+            // Trigger section reveals immediately for hero
+            setTimeout(() => {
+                document.querySelectorAll('.reveal-view').forEach(el => el.classList.add('active'));
+            }, 500);
+        });
+
+        let currentScroll = 0; let lastScroll = 0; let scrollVelocity = 0;
+
+        function drawConnectors() {
+            time++;
+            if (!initialized) {
+                rotY += 0.004; rotX = 0.4 + Math.sin(time * 0.002) * 0.05;
+            } else {
+                currentScroll = window.scrollY;
+                const diff = currentScroll - lastScroll;
+                scrollVelocity += (diff - scrollVelocity) * 0.1;
+                lastScroll += (diff - lastScroll) * 0.1;
+            }
+            ctx.clearRect(0, 0, width, height); ctx.lineWidth = 1;
+            for (let p of particles) { p.update(scrollVelocity); }
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                if (!initialized) {
+                    const normZ = (p.zDepth + 220) / 440;
+                    ctx.beginPath();
+                    const waveHighlight = (p.waveOffset + 15) / 30;
+                    const baseOpacity = normZ < 0.2 ? 0.05 : 0.15 + normZ * 0.3;
+                    const finalOpacity = baseOpacity * (0.8 + waveHighlight * 0.5);
+                    const size = (normZ > 0.5 ? 0.8 + normZ * 0.5 : 0.6) * (0.8 + waveHighlight * 0.4);
+                    ctx.fillStyle = `rgba(0, 0, 0, ${finalOpacity})`;
+                    ctx.arc(p.x, p.y, size, 0, Math.PI * 2); ctx.fill();
+                } else {
+                    let opacity = 0.12; ctx.strokeStyle = `rgba(0, 0, 0, ${opacity})`;
+                    const idx = i; const nextRowIdx = idx + 1; const nextColIdx = idx + (rows + 1);
+                    if (particles[nextRowIdx] && (idx + 1) % (rows + 1) !== 0) {
+                        ctx.beginPath(); ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(particles[nextRowIdx].x, particles[nextRowIdx].y); ctx.stroke();
+                    }
+                    if (particles[nextColIdx]) {
+                        ctx.beginPath(); ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(particles[nextColIdx].x, particles[nextColIdx].y); ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            drawConnectors();
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', initCanvas);
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX; mouse.y = e.clientY;
+        });
+
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        const heroTitle = document.querySelector('h1 span.serif-italic'); // Target the "Symbiosis" text
+        const spotlight = document.getElementById('spotlight');
+        const glowCards = document.querySelectorAll('.glass-card, .exhibition-card, .metal-card');
+
+        window.addEventListener('mousemove', (e) => {
+            // Spotlight Logic
+            if (spotlight) {
+                spotlight.style.setProperty('--x', `${e.clientX}px`);
+                spotlight.style.setProperty('--y', `${e.clientY}px`);
+            }
+
+            // Card Glow Logic
+            glowCards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--card-x', `${x}px`);
+                card.style.setProperty('--card-y', `${y}px`);
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            if (!initialized) return;
+            const scrollY = window.scrollY;
+
+            requestAnimationFrame(() => {
+                // 1. Hero Text Distortion (Warp Speed Effect)
+                if (scrollY < 800 && heroTitle) {
+                    const progress = Math.min(1, scrollY / 600);
+                    // Fade out, blur, and spread letter spacing
+                    heroTitle.style.letterSpacing = `${progress * 1}em`;
+                    heroTitle.style.filter = `blur(${progress * 10}px)`;
+                    heroTitle.style.opacity = `${1 - progress}`;
+                    // Scale up slightly
+                    heroTitle.style.display = 'inline-block'; // Required for transform
+                    heroTitle.style.transform = `scale(${1 + progress * 0.5})`;
+                }
+
+
+                // Disable 3D parallax on mobile to prevent overlaps on long pages
+                if (window.innerWidth < 768) {
+                    parallaxLayers.forEach(layer => {
+                        layer.style.transform = 'none';
+                    });
+                    return;
+                }
+
+                // 3. Upgraded 3D Parallax Engine
+                parallaxLayers.forEach(layer => {
+                    const speed = parseFloat(layer.getAttribute('data-speed')) || 0;
+                    const rotSpeed = parseFloat(layer.getAttribute('data-parallax-rot')) || 0; // New: Rotation
+
+                    const movement = scrollY * speed;
+                    const rotation = scrollY * rotSpeed;
+
+                    // Simple translate is old. New:
+                    // Only rotate if defined
+                    let transform = `translate3d(0, ${movement}px, 0)`;
+                    if (rotSpeed !== 0) {
+                        transform += ` rotateX(${rotation}deg)`;
+                    }
+
+                    layer.style.transform = transform;
+                });
+            });
+        });
+
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    el.classList.add('active');
+                    scrollObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.1 }); // Trigger slightly earlier (10% visible)
+
+        document.querySelectorAll('.reveal-view, .reveal-3d').forEach(el => {
+            scrollObserver.observe(el);
+        });
+
+        // --- Easter Egg Speech Bubble Logic ---
+        const modal = document.getElementById('easter-egg-modal');
+        const modalText = document.getElementById('modal-text');
+        const closeBtn = document.querySelector('.modal-close');
+        const triggers = document.querySelectorAll('.insight-trigger');
+
+        function openBubble(event, text) {
+            // Prevent event from bubbling to document immediately
+            event.stopPropagation();
+
+            modalText.innerHTML = text;
+            modal.classList.add('active');
+
+            // Calculate Position
+            const triggerEl = event.target;
+            const rect = triggerEl.getBoundingClientRect();
+            const scrollY = window.scrollY || window.pageYOffset;
+            const scrollX = window.scrollX || window.pageXOffset;
+
+            // Simple positioning: Above the text, aligned left-ish
+            // Adjust calculation for optimal placement
+            let top = rect.top + scrollY - modal.offsetHeight - 10; // 10px spacing
+            let left = rect.left + scrollX - 20; // Slight offset so tail aligns
+
+            // If it goes off top, put it below
+            // Note: Since modal is initially hidden, offsetHeight might be small/wrong if not handled. 
+            // Better to make it visible but transparent to measure? 
+            // Or just hardcode an estimate offset or adjust after active.
+
+            // Let's set it below for "NPC style" usually? Or above. Let's try above first.
+            // Actually, "popover" usually sits on top.
+            // Since we need to measure size, we might need a tick.
+
+            // Hardcoded "above" logic with fallback
+            // Position carefully.
+
+            modal.style.top = `${rect.top + scrollY - 20}px`; // Temporary, will adjust via transform usually or simple CSS bottom
+            // Better approach:
+
+            // Reset transforms for calculation
+
+            // Set styles to position "Above" trigger
+            // We use 'bottom' styling logic or just calc top.
+            // Let's put it *above* the text.
+            // top = rect.top + scrollY - (bubbleHeight) - 15px arrow;
+
+            // To be safe and simple without measuring hidden elements too complexly:
+            // Let's just put it below the text, it's safer for flow.
+            // "NPC saying it" -> text bubble usually appears above content.
+
+            // Let's go with: Position absolute top/left.
+            const bubbleWidth = 600;
+
+            // Check if mobile
+            const isMobile = window.innerWidth < 768;
+
+            if (isMobile) {
+                // Centered on mobile
+                modal.style.left = '50%';
+                modal.style.marginLeft = `-${Math.min(bubbleWidth, window.innerWidth * 0.9) / 2}px`; // Center safely
+                modal.style.top = `${rect.top + scrollY - 300}px`;
+            } else {
+                // Align left edge to the trigger's left, but shift heavily left to center the bubble over the text or align nicely
+                // Since it's wide, maybe center it relative to trigger?
+                modal.style.left = `${rect.left + scrollX}px`;
+                modal.style.top = `${rect.top + scrollY}px`;
+            }
+
+            // Simplified positioning:
+            // We set top/left to the trigger. CSS will handle the "shift up".
+
+            // Update CSS transform to account for wider bubble relative to tail
+            modal.style.transform = `translate(-20px, -100%) translateY(-20px)`;
+            // -20px left shift aligns the tail (which is at left: 20px) roughly with the trigger start
+
+        }
+
+        function closeBubble() {
+            modal.classList.remove('active');
+        }
+
+        triggers.forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                const insight = trigger.getAttribute('data-insight');
+                if (insight) {
+                    openBubble(e, insight);
+                }
+            });
+        });
+
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeBubble();
+        });
+
+        // Close on background click (document)
+        document.addEventListener('click', (e) => {
+            // If click is outside modal and modal is active
+            if (modal.classList.contains('active') && !modal.contains(e.target) && !e.target.classList.contains('insight-trigger')) {
+                closeBubble();
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeBubble();
+            }
+        });
+
+        initCanvas();
+        animate();
+
+    </script>
+</body>
+
+</html>

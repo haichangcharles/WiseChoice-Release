@@ -32,6 +32,9 @@ function setupEventListeners() {
   // Select-all toggle button
   document.getElementById('toggle-select-all-btn').addEventListener('click', handleToggleSelectAll);
 
+  // Bulk delete button
+  document.getElementById('bulk-delete-btn').addEventListener('click', handleBulkDelete);
+
   // AI comparison button
   document.getElementById('compare-btn').addEventListener('click', handleAICompare);
 
@@ -85,11 +88,54 @@ function updateSelectAllButton() {
   }
 }
 
+// Update bulk delete button state
+function updateBulkDeleteButton() {
+  const btn = document.getElementById('bulk-delete-btn');
+  if (!btn) return;
+  
+  const hasSelected = selectedIds.size > 0;
+  btn.disabled = !hasSelected;
+  
+  if (hasSelected) {
+    btn.textContent = `Delete Selected (${selectedIds.size})`;
+  } else {
+    btn.textContent = 'Delete Selected';
+  }
+}
+
+// Handle bulk delete action
+async function handleBulkDelete() {
+  const selectedProducts = candidates.filter(p => selectedIds.has(p.id));
+  
+  if (selectedProducts.length === 0) {
+    return;
+  }
+  
+  const count = selectedProducts.length;
+  const message = count === 1 
+    ? `Delete this product?` 
+    : `Delete ${count} selected products?`;
+  
+  if (!confirm(message)) {
+    return;
+  }
+  
+  // Remove selected products
+  candidates = candidates.filter(p => !selectedIds.has(p.id));
+  selectedIds.clear();
+  
+  await chrome.storage.local.set({ [STORAGE_KEY]: candidates });
+  renderProductList();
+}
+
 // Render the product list
 function renderProductList() {
   if (candidates.length === 0) {
     productList.style.display = 'none';
     emptyState.style.display = 'block';
+    // Still need to update button states even when list is empty
+    updateSelectAllButton();
+    updateBulkDeleteButton();
     return;
   }
 
@@ -143,6 +189,8 @@ function renderProductList() {
       }
       // Keep select-all button in sync
       updateSelectAllButton();
+      // Keep bulk delete button in sync
+      updateBulkDeleteButton();
     });
   });
 
@@ -155,6 +203,8 @@ function renderProductList() {
   
   // Refresh select-all button state
   updateSelectAllButton();
+  // Refresh bulk delete button state
+  updateBulkDeleteButton();
 }
 
 // Delete a single product
