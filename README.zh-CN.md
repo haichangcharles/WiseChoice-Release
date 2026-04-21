@@ -14,6 +14,10 @@
 
 **其他语言：** [English](README.md)
 
+<p align="center">
+  <img src="asset/heropage.png" alt="WiseChoice 概览" width="100%" style="max-width:960px" />
+</p>
+
 </div>
 
 ---
@@ -50,26 +54,22 @@
 
 | | |
 | --- | --- |
-| [WiseChoice Document.pdf](asset/WiseChoice%20Document.pdf) | 书面报告：问题、设计、技术叙述。 |
+| [WiseChoice Document.pdf](asset/WiseChoice%20Document.pdf) | 报告：问题、设计、技术叙述。 |
 | [WiseChoice 幻灯片（PDF）](asset/WiseChoice_%20Slide.pdf) | 演讲/答辩用幻灯片稿。 |
 
 ---
 
-## 截图
+## 界面与配图
 
-**Hero 页** — 产品定位与主叙事。
+**Hero 图**已放在仓库开头标题下方（进入 README 第一眼看到的概览）。本节补充 **系统设计图** 与 **侧边栏双模式**。
 
-<p align="center">
-  <img src="asset/heropage.png" alt="WiseChoice Hero 页" width="100%" style="max-width:920px" />
-</p>
-
-**系统设计图** — 扩展、本地服务与模型协作关系。
+**系统设计图** — 浏览器扩展、本地 HTTP 服务与大模型决策链路（详见 [决策 Agent 架构](#decision-agent-architecture)）。
 
 <p align="center">
   <img src="asset/systemdesign.png" alt="WiseChoice 系统设计" width="100%" style="max-width:920px" />
 </p>
 
-**侧边栏界面** — **列表模式（List mode）** 管理候选，**报告模式（Report mode）** 展示结构化 AI 对比结论。
+**侧边栏** — **列表模式（List mode）** 收录与勾选候选；**报告模式（Report mode）** 展示结构化 AI 对比结论。
 
 <p align="center">
   <img src="asset/dualmode.png" alt="WiseChoice 列表模式与报告模式" width="100%" style="max-width:920px" />
@@ -172,18 +172,48 @@ python api_server.py
 - 服务地址：`http://localhost:8765`  
 - API 文档：`http://localhost:8765/docs`  
 
-### 3. 开始使用
+### 3. 试一次采集
 
-打开任意支持的亚马逊商品详情页，采集商品，打开侧边栏，至少勾选 **两件** 商品后点击 **Compare（对比）**。
+打开任意支持的亚马逊 **商品详情页**，便于下一步在浏览器里完整走通流程。
+
+## 在 Google Chrome 中使用 WiseChoice
+
+完成 **加载已解压的扩展**（见上文）后，用法与普通 Chrome 扩展（Manifest V3）相同：
+
+1. **工具栏图标** — 在 Chrome 右上角找到 WiseChoice；可在拼图菜单里 **固定** 到工具栏，方便随时点开。  
+2. **收录商品** — 在亚马逊商品详情页，点击页面上的 **悬浮「+」**（由内容脚本注入），把 **当前商品** 加入候选列表；要比多款可分别打开多个标签页逐个添加。  
+3. **打开侧边栏** — 点击 **WiseChoice 工具栏图标**，Chrome 会打开扩展 **侧边栏**（`sidePanel`），此处展示已保存的全部候选。  
+4. **列表模式** — 勾选 **至少两件** 商品；可删除单项或清空列表。  
+5. **对比** — 点击 **Compare（对比）**。  
+   - 若本机已启动 `http://localhost:8765` 且已配置 `OPENAI_API_KEY`，侧边栏进入 **报告模式**，展示结构化 AI 输出（`title`、TL;DR、strategy、analysis、reasons）。  
+   - 若本地服务未运行，仍会显示 **基础对比** 并提示启动 Python 服务。  
+6. **保持服务进程** — 使用完整 AI 报告时，请在终端保持 `python api_server.py`（或 `start_ai_service.sh`）运行。
+
+权限与本地存储说明见下文 **数据、隐私与安全**。
 
 ## 架构概览
 
 | 层级 | 职责 |
 | --- | --- |
 | **扩展 (MV3)** | `content.js` 抽取商品数据；`background.js` 存储候选；`sidebar.*` 为对比界面；`manifest.json` 配置权限与侧边栏。 |
-| **本地服务** | `api_server.py` 提供 `POST /api/compare`；`agent.py` 按 JSON Schema 调用模型，生成 `title` / `tldr` / `strategy` / `analysis` / `reasons`。 |
+| **本地服务** | `api_server.py` 提供 `POST /api/compare`；`agent.py` 实现决策 Agent（见下节）。 |
 
 扩展直接请求 `http://localhost:8765`。开发环境下 CORS 较宽松，请在可信环境运行服务。
+
+<a id="decision-agent-architecture"></a>
+
+## 决策 Agent 架构
+
+**系统设计、动机与架构细节**详见 **[WiseChoice Document.pdf](asset/WiseChoice%20Document.pdf)**（与本开源仓库一并提供的**项目报告**）；Agent 与流水线说明以 PDF 为准。
+
+**运行时链路（摘要）：**
+
+1. **浏览器** — 侧边栏将勾选的商品序列化为 JSON，通过 `fetch` 发往 `POST http://localhost:8765/api/compare`。  
+2. **`api_server.py`** — 根据标题、价格、要点、规格、ASIN、链接等拼成一条自然语言 **对比 Prompt**。  
+3. **`agent.py`（`run_workflow`）** — 调用 OpenAI **Responses** API：固定 **指令（INSTRUCTIONS）** 约束 WiseChoice 的决策逻辑与输出体裁，并用 JSON Schema（`DecisionMakingSchema`）约束字段：`title`、`tldr`、`strategy`、`analysis`、`reasons`。  
+4. **返回** — 解析后的五段字段回到侧边栏，在 **报告模式** 中渲染。
+
+上文 **[系统设计图](asset/systemdesign.png)** 即该流水线的一览：扩展 ↔ 本地 API ↔ 决策模型。
 
 ## 本地 API 摘要
 
@@ -217,7 +247,7 @@ python api_server.py
 
 ```
 WiseChoice-Release/
-├── asset/                 # PDF（Document、Slide）、演示视频、截图（heropage、systemdesign、dualmode）
+├── asset/                 # PDF、演示视频、配图（heropage 标题区、systemdesign、dualmode）
 ├── manifest.json
 ├── content.js / content.css
 ├── background.js

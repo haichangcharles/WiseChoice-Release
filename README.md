@@ -14,6 +14,10 @@
 
 **Other languages:** [简体中文](README.zh-CN.md)
 
+<p align="center">
+  <img src="asset/heropage.png" alt="WiseChoice — overview" width="100%" style="max-width:960px" />
+</p>
+
 </div>
 
 ---
@@ -50,26 +54,22 @@ If the player below is blank, use **[showcase (file view)](asset/WiseChoice%20sh
 
 | | |
 | --- | --- |
-| [WiseChoice Document.pdf](asset/WiseChoice%20Document.pdf) | Written report: problem, design, technical narrative. |
+| [WiseChoice Document.pdf](asset/WiseChoice%20Document.pdf) | Report: problem, design, technical narrative. |
 | [WiseChoice Slide deck (PDF)](asset/WiseChoice_%20Slide.pdf) | Slide-style deck for talks and demos. |
 
 ---
 
-## Screenshots
+## Product UI & figures
 
-**Hero page** — product positioning and primary story.
+The **hero visual** above sits with the title—this section adds the **system-design** figure and the **side panel** (List mode vs Report mode).
 
-<p align="center">
-  <img src="asset/heropage.png" alt="WiseChoice hero page" width="100%" style="max-width:920px" />
-</p>
-
-**System design** — extension, local service, and model flow.
+**System design** — browser extension, local HTTP service, and LLM decision path (see also [Decision agent architecture](#decision-agent-architecture)).
 
 <p align="center">
   <img src="asset/systemdesign.png" alt="WiseChoice system design" width="100%" style="max-width:920px" />
 </p>
 
-**Side panel UI** — **List mode** (candidate shortlist) and **Report mode** (structured AI comparison output).
+**Side panel** — **List mode** (shortlist and selection) and **Report mode** (structured AI comparison).
 
 <p align="center">
   <img src="asset/dualmode.png" alt="WiseChoice list mode and report mode" width="100%" style="max-width:920px" />
@@ -170,18 +170,48 @@ python api_server.py
 - Service: `http://localhost:8765`
 - Interactive API docs: `http://localhost:8765/docs`
 
-### 3. Use it
+### 3. Try a quick capture
 
-Open any supported Amazon product detail page, capture products, open the side panel, select **at least two** items, and click **Compare**.
+Open a supported Amazon **product detail** page so you can test capture in the next section.
+
+## Using WiseChoice in Google Chrome
+
+After **Load unpacked** (see above), the extension runs like any Chrome MV3 add-on:
+
+1. **Find the icon** — WiseChoice appears on the Chrome toolbar (puzzle-piece menu → **pin** it if you want it always visible).
+2. **Collect products** — On an Amazon product page, use the **floating “+”** (injected by the content script) to add the **current listing** to your shortlist. Repeat on other tabs if you are comparing multiple items.
+3. **Open the side panel** — Click the **WiseChoice toolbar icon**. Chrome opens the extension **side panel** (Manifest V3 `sidePanel`), where all saved candidates are listed.
+4. **List mode** — Select **two or more** products (checkboxes). You can remove items or clear the list as needed.
+5. **Compare** — Click **Compare**.  
+   - If `http://localhost:8765` is up and `OPENAI_API_KEY` is set, the panel switches to **Report mode** and shows the structured AI output (`title`, TL;DR, strategy, analysis, reasons).  
+   - If the local service is offline, you still get a **basic comparison** and a hint to start the Python service.
+6. **Keep the service running** — Leave `python api_server.py` (or `start_ai_service.sh`) running in a terminal while you use full AI reports.
+
+For permissions and data kept on-device, see **Data, privacy, and security** below.
 
 ## Architecture (overview)
 
 | Layer | Role |
 | --- | --- |
 | **Extension (MV3)** | `content.js` extracts product data; `background.js` stores candidates; `sidebar.*` is the comparison UI; `manifest.json` wires permissions and the side panel. |
-| **Local service** | `api_server.py` exposes `POST /api/compare`; `agent.py` calls the model with a strict JSON schema for `title` / `tldr` / `strategy` / `analysis` / `reasons`. |
+| **Local service** | `api_server.py` exposes `POST /api/compare`; `agent.py` implements the decision agent (see below). |
 
 The extension calls `http://localhost:8765` directly. CORS is relaxed for local development—run the service only on trusted machines.
+
+<a id="decision-agent-architecture"></a>
+
+## Decision agent architecture
+
+The **full stack diagram, motivation, and design rationale** are documented in **[WiseChoice Document.pdf](asset/WiseChoice%20Document.pdf)**—the project report included with this open-source repository.
+
+**Runtime path (summary):**
+
+1. **Browser** — Selected products are serialized to JSON and sent with `fetch` to `POST http://localhost:8765/api/compare`.
+2. **`api_server.py`** — Builds a single natural-language **comparison prompt** from titles, prices, bullets, specs, ASIN, and links.
+3. **`agent.py` (`run_workflow`)** — Calls the OpenAI **Responses** API with (a) fixed **instructions** defining WiseChoice’s decision logic and output rubric, and (b) **structured output** enforced by a JSON schema (`DecisionMakingSchema`: `title`, `tldr`, `strategy`, `analysis`, `reasons`).
+4. **Response** — Parsed fields are returned to the side panel and rendered in **Report mode**.
+
+The figure **[system design](asset/systemdesign.png)** above matches this pipeline at a glance: extension ↔ local API ↔ decision model.
 
 ## Local API reference
 
@@ -213,7 +243,7 @@ The extension calls `http://localhost:8765` directly. CORS is relaxed for local 
 
 ```
 WiseChoice-Release/
-├── asset/                 # PDFs (Document, Slide), videos, screenshots (heropage, systemdesign, dualmode)
+├── asset/                 # PDFs, videos, figures (heropage hero, systemdesign, dualmode)
 ├── manifest.json
 ├── content.js / content.css
 ├── background.js
